@@ -3,10 +3,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlicer';
 import itemReducer from '../features/items/itemSlice';
 import logger from 'redux-logger';
+import cartReducer  from '../features/cart/cartSlice';
+
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    cart: cartReducer,
     items: itemReducer
   },
   middleware: (getDefaultMiddleware) =>

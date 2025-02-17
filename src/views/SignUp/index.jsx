@@ -1,59 +1,60 @@
 // src/components/SignUp.js
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { 
-  Box, 
-  TextField, 
-  Button, 
-  Typography, 
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
   Container,
-  Alert, 
+  Alert,
   Link,
   Grid,
   RadioGroup,
   FormControlLabel,
   Radio,
   FormControl,
-  FormLabel 
-} from '@mui/material';
-import { signup } from '../../api';
+  FormLabel,
+} from "@mui/material";
+import { signup } from "../../api";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phoneNumber: '',
-    user_type: 'buyer', // default value
+    firstName: "",
+    lastName: "",
+    email: "",
+    userName: "",
+    password: "",
+    confirmPassword: "",
+    phoneNumber: "",
+    user_type: "buyer", // default value
     address: {
-      street: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: ''
-    }
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "",
+    },
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes('.')) {
+    if (name.includes(".")) {
       // Handle nested address fields
-      const [parent, child] = name.split('.');
-      setFormData(prev => ({
+      const [parent, child] = name.split(".");
+      setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: value
-        }
+          [child]: value,
+        },
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
@@ -74,9 +75,9 @@ const SignUp = () => {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Typography component="h1" variant="h5">
@@ -95,15 +96,15 @@ const SignUp = () => {
                   value={formData.user_type}
                   onChange={handleChange}
                 >
-                  <FormControlLabel 
-                    value="buyer" 
-                    control={<Radio />} 
-                    label="Buy Products" 
+                  <FormControlLabel
+                    value="buyer"
+                    control={<Radio />}
+                    label="Buy Products"
                   />
-                  <FormControlLabel 
-                    value="seller" 
-                    control={<Radio />} 
-                    label="Sell Products" 
+                  <FormControlLabel
+                    value="seller"
+                    control={<Radio />}
+                    label="Sell Products"
                   />
                 </RadioGroup>
               </FormControl>
@@ -126,6 +127,17 @@ const SignUp = () => {
                 name="lastName"
                 label="Last Name"
                 value={formData.lastName}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="username"
+                label="User Name"
+                type="username"
+                value={formData.userName}
                 onChange={handleChange}
               />
             </Grid>
@@ -233,10 +245,10 @@ const SignUp = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={isLoading}
           >
-            {isLoading ? 'Signing up...' : 'Sign Up'}
+            {isLoading ? "Signing up..." : "Sign Up"}
           </Button>
-          
-          <Box sx={{ textAlign: 'center' }}>
+
+          <Box sx={{ textAlign: "center" }}>
             <Link href="/signin" variant="body2">
               Already have an account? Sign in
             </Link>
