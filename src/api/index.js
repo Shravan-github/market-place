@@ -62,15 +62,16 @@ axiosInstance.interceptors.response.use(
 
 // Async thunk for signup
 export const signup = createAsyncThunk(
-  "auth/signup",
+  "/api/signup",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`${API_URL}/signup/`, userData);
-      localStorage.setItem("refreshToken", response.data.tokens?.refresh);
-      localStorage.setItem("token", response.data.tokens?.access);
+      const response = await axiosInstance.post(`${API_URL}/signup/`, userData); //Makes POST request to signup endpoint
+      localStorage.setItem("refreshToken", response.data?.tokens?.refresh);
+      localStorage.setItem("token", response.data?.tokens?.access); //Stores authentication tokens in localStorage
+      localStorage.setItem("user", JSON.stringify(response.data?.user)); //Stores authentication tokens in localStorage
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data); //Handles errors using rejectWithValue
     }
   }
 );
@@ -83,6 +84,7 @@ export const signin = createAsyncThunk(
       const response = await axiosInstance.post(`${API_URL}/signin/`, userData);
       localStorage.setItem("refreshToken", response.data.tokens?.refresh);
       localStorage.setItem("token", response.data.tokens?.access);
+      localStorage.setItem("user", JSON.stringify(response.data?.user)); //Stores authentication tokens in localStorage
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -95,6 +97,30 @@ export const fetchItems = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/items/");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createProduct = createAsyncThunk(
+  'items/createProduct',
+  async (productData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/items/', productData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  'items/updateProduct',
+  async ({ id, productData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/items/${id}/`, productData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

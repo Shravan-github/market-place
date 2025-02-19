@@ -1,4 +1,3 @@
-// src/components/SignIn.js
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
@@ -16,8 +15,8 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
-    username: 'srikanthsunkari',
-    password: 'SecurePass123!',
+    username: '',
+    password: '',
   });
 
   const handleChange = (e) => {

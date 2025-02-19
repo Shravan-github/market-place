@@ -5,114 +5,88 @@ import {
   Container,
   Paper,
   Typography,
+  Grid,
   Avatar,
   Box,
-  Grid,
   Divider,
-  Card,
-  CardContent,
 } from "@mui/material";
-import { Person } from "@mui/icons-material";
+import Header from "../Header";
 
 const Profile = () => {
-  // Get user from auth state
-  const { user } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user);
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            mb: 4,
-          }}
-        >
-          <Avatar
-            sx={{
-              width: 120,
-              height: 120,
-              mb: 2,
-              bgcolor: "primary.main",
-            }}
-          >
-            <Person sx={{ fontSize: 80 }} />
-          </Avatar>
-          <Typography variant="h4" gutterBottom>
-            {user?.username || "User"}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {user?.email || "No email provided"}
-          </Typography>
-        </Box>
-        <Divider sx={{ my: 3 }} />
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h6" gutterBottom>
-              Account Details
+    <>
+      <Header />
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Avatar
+              src={user?.avatar}
+              sx={{
+                width: 120,
+                height: 120,
+                mx: "auto",
+                mb: 2,
+              }}
+            />
+            <Typography variant="h4" gutterBottom>
+              {user?.firstName} {user?.lastName}
             </Typography>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle2" color="text.secondary">
-                User ID
-              </Typography>
-              <Typography variant="body1">{user?.id || "N/A"}</Typography>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Paper elevation={1} sx={{ p: 2 }}>
-                <Grid container spacing={2}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    User Type
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ textTransform: "capitalize" }}
-                  >
-                    {user?.user_type || "N/A"}
-                  </Typography>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle2" color="text.secondary">
-                      Phone
-                    </Typography>
-                    <Typography variant="body1">
-                      {user?.phone || "Not provided"}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle2" color="text.secondary">
-                      Address
-                    </Typography>
-                    <Typography variant="body1">
-                      {user?.address || "Not provided"}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Box>
-          </Grid>
+            <Typography variant="subtitle1" color="text.secondary">
+              {user?.user_type === "seller" ? "Seller" : "Buyer"}
+            </Typography>
+          </Box>
 
-          <Grid item xs={12} md={6}>
-            <Typography variant="h6" gutterBottom>
-              Additional Information
-            </Typography>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle2" color="text.secondary">
-                Status
+          <Divider sx={{ my: 3 }} />
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" gutterBottom>
+                Personal Information
               </Typography>
-              <Typography variant="body1">Active</Typography>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle2" color="text.secondary">
-                Member Since
+              <Box sx={{ ml: 2 }}>
+                <Typography variant="body1" gutterBottom>
+                  <strong>Username:</strong> {user?.username}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  <strong>Email:</strong> {user?.email}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  <strong>Phone:</strong> {user?.phone}
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" gutterBottom>
+                Address
               </Typography>
-              <Typography variant="body1">
-                {new Date().toLocaleDateString()}
-              </Typography>
-            </Box>
+              {typeof user?.address === "object" ? (
+                <Box sx={{ ml: 2 }}>
+                  <Typography variant="body1" gutterBottom>
+                    <strong>City:</strong> {user?.address?.city}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    <strong>State:</strong> {user?.address?.state}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    <strong>ZIP Code:</strong> {user?.address?.zipCode}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    <strong>Country:</strong> {user?.address?.country}
+                  </Typography>
+                </Box>
+              ) : (
+                <Typography variant="body1" gutterBottom>
+                  {user?.address}
+                </Typography>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-    </Container>
+        </Paper>
+      </Container>
+    </>
   );
 };
 

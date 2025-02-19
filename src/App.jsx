@@ -1,3 +1,95 @@
+// import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { useEffect } from "react";
+// import ProtectedRoute from "./views/SignIn/ProtectedRoute";
+// import SignIn from "./views/SignIn";
+// import SignUp from "./views/SignUp";
+// import Home from "./views/Home";
+// import Cart from "./views/Cart";
+// import Profile from "./components/Profile";
+// import Header from "./components/Header";
+// import { Box } from "@mui/material";
+
+// function App() {
+//   const { token, user } = useSelector((state) => state.auth);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     // Only redirect if user is authenticated and on signin/signup pages
+//     if (token) {
+//       const currentPath = window.location.pathname;
+//       // if (currentPath === '/signin' || currentPath === '/signup') {
+//         navigate('/dashboard');
+//       // }
+//     }
+//   }, [token, navigate]);
+
+//   const WithHeader = ({ children }) => (
+//     <>
+//       <Header />
+//       <Box sx={{ pt: 2 }}>{children}</Box>
+//     </>
+//   );
+
+//   return (
+//     <Routes>
+//       <Route
+//         path="/"
+//         element={token ? <Navigate to="/dashboard" /> : <Navigate to="/signin" />}
+//       />
+
+//       {/* Public Routes */}
+//       <Route
+//         path="/signin"
+//         element={token ? <Navigate to="/dashboard" /> : <SignIn />}
+//       />
+//       <Route
+//         path="/signup"
+//         element={token ? <Navigate to="/dashboard" /> : <SignUp />}
+//       />
+
+//       {/* Protected Routes */}
+//       <Route
+//         path="/dashboard"
+//         element={
+//           <ProtectedRoute>
+//             <WithHeader>
+//               <Home />
+//             </WithHeader>
+//           </ProtectedRoute>
+//         }
+//       />
+
+//       <Route
+//         path="/profile"
+//         element={
+//           <ProtectedRoute>
+//             <WithHeader>
+//               <Profile />
+//             </WithHeader>
+//           </ProtectedRoute>
+//         }
+//       />
+
+//       <Route
+//         path="/cart"
+//         element={
+//           <ProtectedRoute>
+//             <WithHeader>
+//               <Cart />
+//             </WithHeader>
+//           </ProtectedRoute>
+//         }
+//       />
+
+//       {/* Catch all route */}
+//       <Route path="*" element={<Navigate to="/" replace />} />
+//     </Routes>
+//   );
+// }
+
+// export default App;
+
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import ProtectedRoute from "./views/SignIn/ProtectedRoute";
 import SignIn from "./views/SignIn";
@@ -9,6 +101,7 @@ import Cart from "./views/Cart";
 import Profile from "./components/Profile";
 import Header from "./components/Header";
 import { Box } from "@mui/material";
+import AddProduct from "./views/AddProduct";
 
 //import MainLayout from "./layouts/MainLayout";
 
@@ -18,12 +111,12 @@ function App() {
 
   // Redirect to dashboard if authentication is successful
   useEffect(() => {
-    console.log("token", token);
+    console.log("App token", token);
     if (token) {
       console.log("navigate to dashboard from App");
       navigate("/dashboard");
     }
-  }, [token, navigate]);
+  }, [token]);
 
   const WithHeader = ({ children }) => (
     <>
@@ -37,7 +130,7 @@ function App() {
       <Route path="/" element={<Navigate to="/signin" replace />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
-
+      <Route path="/profile" element={<Profile />} />
       <Route
         path="/dashboard"
         element={
@@ -60,11 +153,21 @@ function App() {
         }
       />
       <Route
-        path="/profile"
+        path="/add-product"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedUserTypes={["seller"]}>
             <WithHeader>
-              <Profile />
+              <AddProduct />
+            </WithHeader>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/edit-product/:id"
+        element={
+          <ProtectedRoute allowedUserTypes={["seller"]}>
+            <WithHeader>
+              <AddProduct />
             </WithHeader>
           </ProtectedRoute>
         }
