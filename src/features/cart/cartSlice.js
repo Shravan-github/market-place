@@ -1,26 +1,10 @@
 // src/features/cart/cartSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-// Async thunk for fetching cart
-export const fetchCart = createAsyncThunk(
-  'cart/fetchCart',
-  async (_, { rejectWithValue }) => {
-    try {
-      // Replace with your actual API call
-      const response = await fetch('/api/cart');
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   items: [],
   status: 'idle',
-  error: null,
-  total: 0
+  error: null
 };
 
 const cartSlice = createSlice({
@@ -28,13 +12,11 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { itemId, quantity } = action.payload;
-      const existingItem = state.items.find(item => item.id === itemId);
-      
+      const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
-        existingItem.quantity += quantity;
+        existingItem.quantity += 1;
       } else {
-        state.items.push({ id: itemId, quantity });
+        state.items.push({ ...action.payload, quantity: 1 });
       }
     },
     updateCartItem: (state, action) => {
@@ -50,28 +32,27 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchCart.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchCart.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.items = action.payload;
-      })
-      .addCase(fetchCart.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      });
   }
 });
 
-export const { 
-  addToCart, 
-  updateCartItem, 
-  removeFromCart, 
-  clearCart 
-} = cartSlice.actions;
+// Local Storage functions
+export const saveCartToLocalStorage = (cartItems) => {
+  try {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  } catch (error) {
+    console.error('Error saving cart to localStorage:', error);
+  }
+};
 
+export const loadCartFromLocalStorage = () => {
+  try {
+    const cartItems = localStorage.getItem('cart');
+    return cartItems ? JSON.parse(cartItems) : [];
+  } catch (error) {
+    console.error('Error loading cart from localStorage:', error);
+    return [];
+  }
+};
+
+export const { addToCart, updateCartItem, removeFromCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

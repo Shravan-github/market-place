@@ -191,7 +191,7 @@ const Header = () => {
 
                   <Box sx={{ px: 2, py: 1 }}>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Phone:</strong> {user.phoneNumber}
+                      <strong>Phone:</strong> {user.phone}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       <strong>Location:</strong>{" "}
