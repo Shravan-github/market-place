@@ -73,7 +73,7 @@ const Cart = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           {items.map((item) => (
-            <Card key={item.id} sx={{ mb: 2 }}>
+           <Card key={`cart-item-${item.id}`} sx={{ mb: 2 }}>
               <CardContent>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={3}>
